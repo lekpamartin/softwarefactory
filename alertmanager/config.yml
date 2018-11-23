@@ -1,0 +1,26 @@
+global:
+  smtp_smarthost: 'hostname:25'
+  smtp_from: 'admin@test.fr'
+  smtp_require_tls: true
+  smtp_hello: 'softwarefactory_alertmanager'
+  smtp_auth_username: 'user'
+  smtp_auth_password: 'password'
+  smtp_auth_identity: 'admin@test.fr'
+
+route:
+  receiver: 'default-receiver'
+  group_by: ['alertname']
+
+#inhibit_rules:
+#- source_match:
+#    severity: 'critical'
+#  target_match:
+#    severity: 'warning'
+#  # Apply inhibition if the alertname is the same.
+#  equal: ['alertname']
+
+receivers:
+- name: 'default-receiver'
+  email_configs:
+  - to: 'user@test.fr'
+    require_tls: true
