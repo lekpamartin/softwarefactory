@@ -10,6 +10,7 @@ fi
 
 HARBOR_RELEASE="1.6.0"
 HARBOR_VERSION="1.6.2"
+HARBOR_TYPE="online"
 
 echo -en "\n\t Softwarefactory building \n\n\t Login : " 
 read ADMIN_USER
@@ -28,9 +29,9 @@ case $ACTION in
 			echo -en "\n\t\t - Harbor already exist"
 		else
 			echo -en "\n\t\t - Getting sources (v$HARBOR_VERSION)"
-			wget -q https://storage.googleapis.com/harbor-releases/release-$HARBOR_RELEASE/harbor-offline-installer-v$HARBOR_VERSION.tgz
-			tar xvf harbor-offline-installer-v$HARBOR_VERSION.tgz
-			rm -f harbor-offline-installer-v$HARBOR_VERSION.tgz
+			wget -q https://storage.googleapis.com/harbor-releases/release-$HARBOR_RELEASE/harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
+			tar xvf harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
+			rm -f harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
 		fi
 		cd harbor
 		./install.sh --with-clair
