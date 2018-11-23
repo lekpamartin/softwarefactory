@@ -132,7 +132,7 @@ services:
     volumes:
       - ./caddy/:/etc/caddy/
     environment:
-      - =${ADMIN_USER:-admin}
+      - ADMIN_USER=${ADMIN_USER:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-aec4Fgh51f}
     restart: unless-stopped
     networks:
