@@ -7,6 +7,7 @@ networks:
 volumes:
     prometheus_data: {}
     grafana_data: {}
+    jenkins_data: {}
 
 services:
 
@@ -81,8 +82,29 @@ services:
     restart: unless-stopped
     expose:
       - 8080
-   ports:
+    ports:
       - "8080:8080"
+    networks:
+      - softwarefactory-net
+    labels:
+      org.label-schema.group: "softwarefactory"
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/datasources:/etc/grafana/datasources
+      - ./grafana/dashboards:/etc/grafana/dashboards
+      - ./grafana/setup.sh:/setup.sh
+    entrypoint: /setup.sh
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-aec4Fgh51f}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    restart: unless-stopped
+    expose:
+      - 3000
     networks:
       - softwarefactory-net
     labels:
@@ -112,6 +134,19 @@ services:
     environment:
       - =${ADMIN_USER:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-aec4Fgh51f}
+    restart: unless-stopped
+    networks:
+      - softwarefactory-net
+    labels:
+      org.label-schema.group: "softwarefactory"
+
+  jenkins:
+    image: jenkins
+    container_name: jenkins
+    ports:
+      - "8081:8080"
+    volumes:
+      - jenkins_data:/var/jenkins_home
     restart: unless-stopped
     networks:
       - softwarefactory-net
