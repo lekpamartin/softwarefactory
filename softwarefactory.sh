@@ -41,10 +41,14 @@ case $ACTION in
 	;;
 	down|Down|DOWN)
 		echo -en "\n\n\t - Building infra"
+		docker-compose down
+		cd harbor
+		docker-compose down
 	;;
 	destroy)
 		echo -en "\n\n\t - Destroying infra"
 		docker-compose down -v
+		cd harbor; docker-compose down -v
 		rm -rf /data/database rm -r /data/registry
 	;;
 esac
