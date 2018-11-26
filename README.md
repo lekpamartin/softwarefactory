@@ -9,8 +9,8 @@ Clone this repository on your Docker host, cd into dockprom directory and run co
 ```bash
 git clone https://github.com/lekpamartin/softwarefactory.git
 cd softwarefactory
-
-ADMIN_USER=admin ADMIN_PASSWORD=admin docker-compose up -d
+vi softwarefactory.conf
+./softwarefactory.sh up
 ```
 
 Prerequisites:
