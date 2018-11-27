@@ -4,7 +4,7 @@ softwarefactory
 
 # Install
 
-Clone this repository on your Docker host, cd into dockprom directory and run compose up:
+Clone and run those commands: You need to edit softwarefactory.conf
 
 ```bash
 git clone https://github.com/lekpamartin/softwarefactory.git
