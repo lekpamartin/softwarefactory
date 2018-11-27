@@ -8,11 +8,6 @@ if [ "$ACTION" == "" ]; then
 	exit 
 fi 
 
-HARBOR_RELEASE="1.6.0"
-HARBOR_VERSION="1.6.2"
-#online|offline
-HARBOR_TYPE="online"
-
 echo -en "\n\t Softwarefactory building \n\n\t Login : " 
 read ADMIN_USER
 echo -en "\t Password : "
@@ -20,24 +15,32 @@ read -s ADMIN_PASSWORD
 
 cd $WORKINGDIR
 
+#Loading configuration
+. ./softwarefactory.conf
+
 case $ACTION in
 	up|Up|UP)
 		echo -en "\n\n\t * Running infra\n"
-		ADMIN_USER=$ADMIN_USER ADMIN_PASSWORD=$ADMIN_PASSWORD docker-compose up -d
+		docker-compose up -d
 
-		echo -en "\n\n\t * Harbor"
-		if [ -e harbor ]; then
-			echo -en "\n\t\t - Harbor already exist"
+		#HARBOR configuration
+		if [ "$HARBOR_ENABLE" == "yes" ]; then
+			echo -en "\n\n\t * Harbor is enabled"
+			if [ -e harbor ]; then
+				echo -en "\n\t\t - Harbor already exist"
+			else
+				echo -en "\n\t\t - Getting sources (v$HARBOR_VERSION)\n"
+				wget -q https://storage.googleapis.com/harbor-releases/release-$HARBOR_RELEASE/harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
+				tar xvf harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
+				rm -f harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
+			fi
+			cd harbor
+			echo -en "\n\t\t - Running (${HARBOR_SERVICES})\n"
+			sed -i "s/ui_url_protocol = http$/ui_url_protocol = https/g" harbor.cfg
+			./install.sh ${HARBOR_SERVICES}
 		else
-			echo -en "\n\t\t - Getting sources (v$HARBOR_VERSION)\n"
-			wget -q https://storage.googleapis.com/harbor-releases/release-$HARBOR_RELEASE/harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
-			tar xvf harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
-			rm -f harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
+			echo -en "\n\n\t * Harbor is disabled"
 		fi
-		cd harbor
-		echo -en "\n\t\t - Running \n"
-		sed -i "s/ui_url_protocol = http$/ui_url_protocol = https/g" harbor.cfg
-		./install.sh --with-clair
 	;;
 	down|Down|DOWN)
 		echo -en "\n\n\t - Building infra"
