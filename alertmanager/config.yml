@@ -24,3 +24,23 @@ receivers:
   email_configs:
   - to: 'user@test.fr'
     require_tls: true
+    headers:
+      subject: "[SOFTWAREFACTORY] {{ range .Alerts }} [{{ .Labels.severity }}] {{ .Annotations.summary }} {{ end}}"
+    html: |
+      {{ range .Alerts }}
+      <b>Trigger description</b> {{ .Annotations.description }}<br><br>
+      <b>Trigger summary</b> {{ .Annotations.summary }}
+      <p>
+      Alerts info
+      <ul>
+      <li>Prometheus alertname {{.Labels.alertname}}</li>
+      <li>Check instance  {{ .Labels.instance }}</li>
+      <li>Check job  {{ .Labels.job }}</li>
+      <li>Check severity  {{ .Labels.severity }}</li>
+      </ul>
+      Others alerts info <br>
+      {{ .Labels }}
+      </p>
+      {{ end }}
+      </body>
+      </html>
