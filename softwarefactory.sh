@@ -4,14 +4,11 @@ ACTION=$1
 WORKINGDIR=`dirname $0`
 
 if [ "$ACTION" == "" ]; then
-	echo -en "\n\t $0 up|down\n\n"
+	echo -e "\n\t $0 up|down\n\n"
 	exit 
 fi 
 
-echo -en "\n\t Softwarefactory building \n\n\t Login : " 
-read ADMIN_USER
-echo -en "\t Password : "
-read -s ADMIN_PASSWORD
+echo -e "\n\t SOFTWARE FACTORY\n\n" 
 
 cd $WORKINGDIR
 
@@ -25,22 +22,22 @@ case $ACTION in
 
 		#HARBOR configuration
 		if [ "$HARBOR_ENABLE" == "yes" ]; then
-			echo -en "\n\n\t * Harbor is enabled"
+			echo -e "\n\n\t - Harbor is enabled"
 			if [ -e harbor ]; then
-				echo -en "\n\t\t - Harbor already exist"
+				echo -e "\n\t\t . Harbor already exist"
 			else
-				echo -en "\n\t\t - Getting sources (v$HARBOR_VERSION)\n"
+				echo -en "\n\t\t . Getting sources (v$HARBOR_VERSION)\n"
 				wget -q https://storage.googleapis.com/harbor-releases/release-$HARBOR_RELEASE/harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
 				tar xvf harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
 				rm -f harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
 			fi
 			cd harbor
-			echo -en "\n\t\t - Running (${HARBOR_SERVICES})\n"
+			echo -en "\n\t\t . Running (${HARBOR_SERVICES})\n"
 			sed -i "s/ui_url_protocol = http$/ui_url_protocol = https/g" harbor.cfg
 			./install.sh ${HARBOR_SERVICES}
 			cd -
 		else
-			echo -e "\n\n\t * Harbor is disabled"
+			echo -e "\n\n\t - Harbor is disabled"
 		fi
 
 		#SONARQUBE configuration
@@ -53,15 +50,23 @@ case $ACTION in
 
 	;;
 	down|Down|DOWN)
-		echo -en "\n\n\t - Building infra"
-		docker-compose down
-		cd harbor
-		docker-compose down
+		echo -en "\n\n\t * Stopping : (yes|no)"
+		read CONFIRM
+		if [ "$CONFIRM" == "yes" ]; then
+			echo -en "\n\n\t - confirmed by user"
+			docker-compose down
+			docker-compose -f docker-compose-sonarqube.yml down
+			docker-compose -f docker-compose-gitlab.yml down
+			cd harbor
+			docker-compose down
+		else
+			echo -e "\n\n\t - canceled by user"
+		fi
 	;;
 	destroy)
 		echo -en "\n\n\t - Destroying infra"
 		docker-compose down -v
 		cd harbor; docker-compose down -v
-		rm -rf /data/database rm -r /data/registry
+		rm -rf /data/database /data/registry
 	;;
 esac

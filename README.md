@@ -4,19 +4,25 @@ softwarefactory
 
 # Install
 
-Clone and run those commands: You need to edit softwarefactory.conf
+Clone the repo
 
 ```bash
 git clone https://github.com/lekpamartin/softwarefactory.git
-cd softwarefactory
-vi softwarefactory.conf
-./softwarefactory.sh up
 ```
 
 Prerequisites:
 
 * Docker Engine >= 1.13
 * Docker Compose >= 1.11
+
+## Run
+Run those commands: You need to edit softwarefactory.conf
+
+```bash
+cd softwarefactory
+vi softwarefactory.conf
+./softwarefactory.sh up
+```
 
 Containers:
 
@@ -28,7 +34,20 @@ Containers:
 * cAdvisor (containers metrics collector)
 * Caddy (reverse proxy and basic auth provider for prometheus and alertmanager)
 
+## Stop
+Run those commands: 
 
+```bash
+cd softwarefactory
+./softwarefactory.sh down
+```
+
+## Destroy
+Run those commands:
+
+```bash
+cd softwarefactory
+./softwarefactory.sh destroy
 
 
 
