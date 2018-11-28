@@ -8,7 +8,7 @@ if [ "$ACTION" == "" ]; then
 	exit 
 fi 
 
-echo -e "\n\t SOFTWARE FACTORY\n\n" 
+echo -e "\n\t SOFTWARE FACTORY" 
 
 cd $WORKINGDIR
 

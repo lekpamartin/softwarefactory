@@ -2,7 +2,7 @@ version: '3.3'
 
 volumes:
     sonarqube_db_data: {}
-    sonarqube_db_front: {}
+    sonarqube_front_data: {}
 
 services:
 
