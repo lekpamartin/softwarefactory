@@ -17,35 +17,35 @@ cd $WORKINGDIR
 
 case $ACTION in
 	up|Up|UP)
-		echo -en "\n\n\t * Running infra\n"
+		echo -en "\n\n\t * Running base infra\n"
 		docker-compose up -d
 
 		#HARBOR configuration
 		if [ "$HARBOR_ENABLE" == "yes" ]; then
-			echo -e "\n\n\t - Harbor is enabled"
+			echo -e "\n\n\t * Harbor is enabled\n"
 			if [ -e harbor ]; then
-				echo -e "\n\t\t . Harbor already exist"
+				echo -e "\n\t\t - Harbor already exist"
 			else
-				echo -en "\n\t\t . Getting sources (v$HARBOR_VERSION)\n"
+				echo -en "\n\t\t - Getting sources (v$HARBOR_VERSION)\n"
 				wget -q https://storage.googleapis.com/harbor-releases/release-$HARBOR_RELEASE/harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
 				tar xvf harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
 				rm -f harbor-$HARBOR_TYPE-installer-v$HARBOR_VERSION.tgz
 			fi
 			cd harbor
-			echo -en "\n\t\t . Running (${HARBOR_SERVICES})\n"
+			echo -en "\n\t\t - Running (${HARBOR_SERVICES})\n"
 			sed -i "s/ui_url_protocol = http$/ui_url_protocol = https/g" harbor.cfg
 			./install.sh ${HARBOR_SERVICES}
 			cd -
 		else
-			echo -e "\n\n\t - Harbor is disabled"
+			echo -e "\n\n\t * Harbor is disabled\n"
 		fi
 
 		#SONARQUBE configuration
 		if [ "$SONARQUBE_ENABLE" == "yes" ]; then
-			echo -en "\n\n\t * SONARQUBE is enabled"
+			echo -en "\n\n\t * SONARQUBE is enabled\n"
 			docker-compose -f docker-compose-sonarqube.yml up -d
 		else
-			echo -e "\n\n\t * SONARQUBE is disabled"
+			echo -e "\n\n\t * SONARQUBE is disabled\n"
 		fi
 
 	;;
