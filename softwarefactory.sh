@@ -38,9 +38,19 @@ case $ACTION in
 			echo -en "\n\t\t - Running (${HARBOR_SERVICES})\n"
 			sed -i "s/ui_url_protocol = http$/ui_url_protocol = https/g" harbor.cfg
 			./install.sh ${HARBOR_SERVICES}
+			cd -
 		else
-			echo -en "\n\n\t * Harbor is disabled"
+			echo -e "\n\n\t * Harbor is disabled"
 		fi
+
+		#SONARQUBE configuration
+		if [ "$SONARQUBE_ENABLE" == "yes" ]; then
+			echo -en "\n\n\t * SONARQUBE is enabled"
+			docker-compose -f docker-compose-sonarqube.yml up -d
+		else
+			echo -e "\n\n\t * SONARQUBE is disabled"
+		fi
+
 	;;
 	down|Down|DOWN)
 		echo -en "\n\n\t - Building infra"
