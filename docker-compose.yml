@@ -14,6 +14,7 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    hostname: prometheus
     volumes:
       - ./prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -36,6 +37,7 @@ services:
   alertmanager:
     image: prom/alertmanager 
     container_name: alertmanager
+    hostname: alertmanager
     volumes:
       - ./alertmanager/:/etc/alertmanager/
     command:
@@ -52,6 +54,7 @@ services:
   nodeexporter:
     image: prom/node-exporter 
     container_name: nodeexporter
+    hostname: nodeexporter
     user: root
     privileged: true
     volumes:
@@ -73,6 +76,7 @@ services:
   cadvisor:
     image: google/cadvisor
     container_name: cadvisor
+    hostname: cadvisor
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -92,6 +96,7 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
+    hostname: grafana
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/datasources:/etc/grafana/datasources
@@ -113,6 +118,7 @@ services:
   pushgateway:
     image: prom/pushgateway 
     container_name: pushgateway
+    hostname: pushgateway
     restart: unless-stopped
     expose:
       - 9091
@@ -124,6 +130,7 @@ services:
   caddy:
     image: stefanprodan/caddy
     container_name: caddy
+    hostname: caddy
     ports:
       - "${GRAFANA_PORT:-3000}:3000"
       - "${PROMETHEUS_PORT:-9090}:9090"
@@ -143,10 +150,13 @@ services:
   jenkins:
     image: jenkins
     container_name: jenkins
+    hostname: jenkins
     ports:
       - "8081:8080"
     volumes:
       - jenkins_data:/var/jenkins_home
+    environment:
+      - no_proxy=127.0.0.1,localhost,sonarqube_front,gitlab
     restart: unless-stopped
     networks:
       - softwarefactory-net

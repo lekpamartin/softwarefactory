@@ -50,10 +50,10 @@ case $ACTION in
 
 	;;
 	down|Down|DOWN)
-		echo -en "\n\n\t * Stopping : (yes|no)"
+		echo -en "\n\n\t * Stopping (yes|no) : "
 		read CONFIRM
 		if [ "$CONFIRM" == "yes" ]; then
-			echo -en "\n\n\t - confirmed by user"
+			echo -e "\n\n\t - confirmed by user\n"
 			docker-compose down
 			docker-compose -f docker-compose-sonarqube.yml down
 			docker-compose -f docker-compose-gitlab.yml down
@@ -65,7 +65,9 @@ case $ACTION in
 	;;
 	destroy)
 		echo -en "\n\n\t - Destroying infra"
-		docker-compose down -v
+		docker-compose down -v --remove-orphans
+		docker-compose -f docker-compose-sonarqube.yml down --remove-orphans
+		docker-compose -f docker-compose-gitlab.yml down --remove-orphans
 		cd harbor; docker-compose down -v
 		rm -rf /data/database /data/registry
 	;;

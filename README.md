@@ -48,7 +48,7 @@ Run those commands:
 ```bash
 cd softwarefactory
 ./softwarefactory.sh destroy
-
+```
 
 
 
