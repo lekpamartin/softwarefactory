@@ -20,6 +20,12 @@ case $ACTION in
 		echo -en "\n\n\t * Running base infra\n"
 		docker-compose up -d
 
+		#GITLAB configuration
+		if [ "$GITLAB_ENABLE" == "yes" ]; then
+			echo -e "\n\n\t * Gitlab is enabled\n"
+			docker-compose -f docker-compose-gitlab.yml up -d	
+		fi
+
 		#HARBOR configuration
 		if [ "$HARBOR_ENABLE" == "yes" ]; then
 			echo -e "\n\n\t * Harbor is enabled\n"
