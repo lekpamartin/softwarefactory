@@ -71,4 +71,7 @@ case $ACTION in
 		cd harbor; docker-compose down -v
 		rm -rf /data/database /data/registry
 	;;
+	*)
+		echo -en "\n\t\t - Unknown parameters : $ACTION\n\n"
+	;;
 esac
