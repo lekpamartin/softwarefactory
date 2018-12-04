@@ -18,7 +18,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 16,
-  "iteration": 1543571557794,
+  "iteration": 1543925636733,
   "links": [],
   "panels": [
     {
@@ -96,6 +96,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Images and container",
       "tooltip": {
@@ -645,6 +646,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Fixed version",
       "tooltip": {
@@ -735,6 +737,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Vulnerabilities",
       "tooltip": {
@@ -787,11 +790,13 @@
       {
         "allValue": ".*",
         "current": {
-          "selected": true,
-          "text": "harbor",
-          "value": "harbor"
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "Prometheus",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": "Registry",
@@ -812,13 +817,13 @@
       {
         "allValue": ".*",
         "current": {
-          "tags": [],
           "text": "All",
           "value": [
             "$__all"
           ]
         },
         "datasource": "Prometheus",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": "Repositories_Images",
@@ -843,6 +848,7 @@
           "value": "$__all"
         },
         "datasource": "Prometheus",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": "tags",
@@ -863,11 +869,11 @@
       {
         "allValue": ".*",
         "current": {
-          "selected": true,
           "text": "HIGH",
           "value": "HIGH"
         },
         "datasource": "Prometheus",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": "severity",
@@ -888,7 +894,7 @@
     ]
   },
   "time": {
-    "from": "now-10d",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {
@@ -919,5 +925,5 @@
   "timezone": "browser",
   "title": "[Docker] Registry",
   "uid": "6p_kSDBmz",
-  "version": 135
+  "version": 139
 }

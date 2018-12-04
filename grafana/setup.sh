@@ -73,13 +73,7 @@ install_dashboards() {
   done
 }
 
-prerequis(){
-	echo "Installing prerequis"
-	apt-get -u update; apt-get -y install curl
-}
-
 configure_grafana() {
-  prerequis
   wait_for_api
   install_datasources
   install_dashboards
