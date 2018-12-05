@@ -4,12 +4,12 @@ gitlab:
    hostname: 'gitlab'
    environment:
      GITLAB_OMNIBUS_CONFIG: |
-       external_url 'https://gitlab.example.com'
+       external_url "https://${GITLAB_EXTERNAL_URL}'
        # Add any other gitlab.rb configuration here, each on its own line
    ports:
-     - '8082:80'
-     - '443:443'
-     - '22:22'
+     - "${GITLAB_PORT_HTTP}:80"
+     - "${GITLAB_PORT_HTTPS}:443"
+     - "${GITLAB_PORT_SSH}:22"
    volumes:
      - '/srv/gitlab/config:/etc/gitlab'
      - '/srv/gitlab/logs:/var/log/gitlab'
