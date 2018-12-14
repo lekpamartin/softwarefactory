@@ -24,6 +24,8 @@ case $ACTION in
 		if [ "$GITLAB_ENABLE" == "yes" ]; then
 			echo -e "\n\n\t * Gitlab is enabled\n"
 			docker-compose -f docker-compose-gitlab.yml up -d	
+		else
+			echo -e "\n\n\t * Gitlab is disabled\n"
 		fi
 
 		#HARBOR configuration

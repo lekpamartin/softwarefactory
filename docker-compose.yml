@@ -33,6 +33,7 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "prometheus"
 
   alertmanager:
     image: prom/alertmanager 
@@ -50,6 +51,7 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "alertmanager"
 
   nodeexporter:
     image: prom/node-exporter 
@@ -72,6 +74,7 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "nodeexporter"
 
   cadvisor:
     image: google/cadvisor
@@ -92,6 +95,7 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "cadvisor"
 
   grafana:
     image: grafana/grafana
@@ -114,6 +118,7 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "grafana"
 
   pushgateway:
     image: prom/pushgateway 
@@ -126,6 +131,7 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "pushgateway"
 
   caddy:
     image: stefanprodan/caddy
@@ -146,6 +152,7 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "caddy"
 
   jenkins:
     image: jenkins
@@ -155,6 +162,7 @@ services:
       - "8081:8080"
     volumes:
       - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - no_proxy=127.0.0.1,localhost,sonarqube_front,gitlab
     restart: unless-stopped
@@ -162,3 +170,4 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "jenkins"

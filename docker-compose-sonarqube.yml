@@ -23,6 +23,7 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "postgresql"
 
   sonarqube_front:
     image: sonarqube
@@ -43,6 +44,7 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "sonarqube"
 
   adminer:
     image: adminer
@@ -53,3 +55,4 @@ services:
       - softwarefactory-net
     labels:
       org.label-schema.group: "softwarefactory"
+      log_type: "adminer"
