@@ -18,7 +18,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 16,
-  "iteration": 1543925636733,
+  "iteration": 1545293404790,
   "links": [],
   "panels": [
     {
@@ -89,9 +89,18 @@
         {
           "expr": "docker_container{type!=\"up\"}",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 1,
           "legendFormat": "container {{type}}",
           "refId": "D"
+        },
+        {
+          "expr": "count(dockerbenchsecurity{job=\"dockerbench\"}) by (instance)",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "[Security] {{ instance }}",
+          "refId": "E"
         }
       ],
       "thresholds": [],
@@ -790,9 +799,9 @@
       {
         "allValue": ".*",
         "current": {
-          "text": "All",
+          "text": "harbor",
           "value": [
-            "$__all"
+            "harbor"
           ]
         },
         "datasource": "Prometheus",
@@ -923,7 +932,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "[Docker] Registry",
+  "title": "[Docker] Bench",
   "uid": "6p_kSDBmz",
-  "version": 139
+  "version": 143
 }
