@@ -53,4 +53,9 @@ cd softwarefactory
 
 
 # Doc
+<pre>
 Forked from [stefanprodan/dockprom](https://github.com/stefanprodan/dockprom)
+Check Dockerfile [hadolint](https://github.com/hadolint/hadolint)
+Create Dockerfile's graph [abesto/docker-compose-graphviz](https://github.com/abesto/docker-compose-graphviz)
+Some docker tools [veggiemonk/awesome-docker](https://github.com/veggiemonk/awesome-docker)
+</pre>
