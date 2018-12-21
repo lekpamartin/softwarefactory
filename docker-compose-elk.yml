@@ -1,0 +1,61 @@
+version: '3.3'
+
+networks:
+  softwarefactory-net:
+    driver: bridge
+
+volumes:
+    elasticsearch_data: {}
+
+services:
+
+  elasticsearch:
+    image: elasticsearch:6.5.4
+    container_name: elasticsearch
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/var/lib/elasticsearch
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    environment:
+      ES_JAVA_OPTS: "-Xmx1g -Xms1g"
+    networks:
+      - softwarefactory-net
+    labels:
+      org.label-schema.group: "softwarefactory"
+      log_type: "elasticsearch"
+
+  logstash:
+    image: logstash:6.5.4
+    container_name: logstash
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+      - "9600:9600"
+    volumes:
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    depends_on:
+       - sonarqube_db
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - softwarefactory-net
+    labels:
+      org.label-schema.group: "softwarefactory"
+      log_type: "logstash"
+
+  kibana:
+    image: kibana:6.5.4
+    restart: unless-stopped
+    ports:
+      - "5601:5601"
+   volumes:
+      - ./elk/kibana/config/:/usr/share/kibana/config:ro
+    networks:
+      - softwarefactory-net
+    labels:
+      org.label-schema.group: "softwarefactory"
+      log_type: "kibana"

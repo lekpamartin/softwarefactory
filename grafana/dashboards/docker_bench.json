@@ -18,7 +18,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 16,
-  "iteration": 1545293404790,
+  "iteration": 1545384743174,
   "links": [],
   "panels": [
     {
@@ -95,11 +95,11 @@
           "refId": "D"
         },
         {
-          "expr": "count(dockerbenchsecurity{job=\"dockerbench\"}) by (instance)",
+          "expr": "count(dockerbenchsecurity{job=\"dockerbench\"}) by (instance,version)",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "[Security] {{ instance }}",
+          "legendFormat": "[Bench {{ version }}] {{ instance }}",
           "refId": "E"
         }
       ],
@@ -934,5 +934,5 @@
   "timezone": "browser",
   "title": "[Docker] Bench",
   "uid": "6p_kSDBmz",
-  "version": 143
+  "version": 145
 }

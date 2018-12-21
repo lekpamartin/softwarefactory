@@ -1,0 +1,82 @@
+####
+# ALERTMANAGER
+####
+ALERTMANAGER0 level=%{WORD:loglevel} ts=%{TIMESTAMP_ISO8601} caller=%{GREEDYDATA:caller} component=%{GREEDYDATA:component} msg=\"%{GREEDYDATA:message}\" err=\"%{GREEDYDATA:err}\"
+ALERTMANAGER1 level=%{WORD:loglevel} ts=%{TIMESTAMP_ISO8601} caller=%{GREEDYDATA:caller} component=%{GREEDYDATA:component} msg=\"%{GREEDYDATA:message}\" num_alerts=%{BASE10NUM:num_alerts} err=\"%{GREEDYDATA:err}\"
+ALERTMANAGER (?:%{ALERTMANAGER0}|%{ALERTMANAGER1})
+
+####
+# CADVISOR
+####
+CADVISOR %{WORD:loglevel} %{TIME}       %{NUMBER} %{NOTSPACE:title}] %{GREEDYDATA:message}
+
+
+####
+#ELASTICSEARCHEXPORTER
+####
+ELASTICSEARCHEXPORTER0 level=%{WORD:loglevel} ts=%{TIMESTAMP_ISO8601} caller=%{GREEDYDATA:caller} msg=\"%{GREEDYDATA:message}\" addr=%{NOTSPACE:addr}
+ELASTICSEARCHEXPORTERerror level=%{WORD:loglevel} ts=%{TIMESTAMP_ISO8601} caller=%{GREEDYDATA:caller} msg=\"%{GREEDYDATA:message}\" err=\"%{GREEDYDATA:err}\"
+ELASTICSEARCHEXPORTER (?:%{ELASTICSEARCHEXPORTER0}|%{ELASTICSEARCHEXPORTERerror})
+
+####
+# JENKINS
+####
+JENKINS0 %{MONTH} %{MONTHDAY}, %{YEAR} %{TIME} %{WORD} %{GREEDYDATA:message}
+JENKINS1 %{WORD:message} %{WORD:message}: %{GREEDYDATA:message}
+JENKINS1 %{WORD:loglevel}: %{GREEDYDATA:message}
+JENKINS2 --%{GREEDYDATA} %{GREEDYDATA:message}
+JENKINS (?:%{JENKINS0}|%{JENKINS1}|%{JENKINS2})
+
+####
+# GRAFANA
+####
+GRAFANA0 t=%{TIMESTAMP_ISO8601} lvl=%{WORD:loglevel} msg=\"%{GREEDYDATA:message}\" logger=%{GREEDYDATA:logger}
+GRAFANA1 t=%{TIMESTAMP_ISO8601} lvl=%{WORD:loglevel} msg=\"%{GREEDYDATA:message}\" logger=%{GREEDYDATA:logger} %{WORD:other_field}=%{GREEDYDATA:other_value}
+GRAFANA2 t=%{TIMESTAMP_ISO8601} lvl=%{WORD:loglevel} msg=\"%{GREEDYDATA:message}\" logger=%{GREEDYDATA:logger} ruleId=%{BASE10NUM:ruleId} name=\"%{GREEDYDATA:name}\" %{GREEDYDATA} to=%{WORD:to}
+GRAFANA3 t=%{TIMESTAMP_ISO8601} lvl=%{WORD:loglevel} msg=\"%{GREEDYDATA:message}\" logger=%{GREEDYDATA:logger} userId=%{BASE10NUM:userId} orgId=%{BASE10NUM:orgId} uname=%{GREEDYDATA:uname} method=%{WORD:method} path=%{GREEDYDATA:path} status=%{BASE10NUM:status} remote_addr=%{IP:remote_addr} time_ms=%{BASE10NUM:time_ms} size=%{BASE10NUM:size} referer=\"%{NOTSPACE:referer}\"
+GRAFANA4 t=%{TIMESTAMP_ISO8601} lvl=%{WORD:loglevel} msg=\"%{GREEDYDATA:message}\" logger=%{GREEDYDATA:logger} userId=%{BASE10NUM:userId} orgId=%{BASE10NUM:orgId} uname=%{GREEDYDATA:uname} error=%{GREEDYDATA:path} stack=\"%{GREEDYDATA:stack}\"
+GRAFANA (?:%{GRAFANA0}|%{GRAFANA1}|%{GRAFANA2}|%{GRAFANA3}|%{GRAFANA4})
+
+
+####
+# NGINX
+####
+NGUSERNAME [a-zA-Z\.\@\-\+_%]+
+NGUSER %{NGUSERNAME}
+NGINXACCESS %{IPORHOST:clientip} %{NGUSER:ident} %{NGUSER:auth} \[%{HTTPDATE}\] "%{WORD:verb} %{URIPATHPARAM:request} HTTP/%{NUMBER:httpversion}" %{NUMBER:response}  (?:%{NUMBER:bytes}|-) (?:"(?:%{URI:referrer}|-)"|%{QS:referrer}) %{QS:agent} %{QS:xforwardedfor} %{IPORHOST:host} %{BASE10NUM:request_duration}
+
+
+####
+# NODEEXPORTER
+####
+NODEEXPORTER time=\"%{TIMESTAMP_ISO8601}\" level=%{WORD:loglevel} msg=\"%{GREEDYDATA:message}\" source=\"%{GREEDYDATA:source}\"
+
+
+
+####
+# PROMETHEUS
+####
+PROMETHEUS0 level=%{WORD:loglevel} ts=%{TIMESTAMP_ISO8601} caller=%{GREEDYDATA:caller} msg=\"%{GREEDYDATA:message}\" mint=%{NUMBER:mint} maxt=%{NUMBER:maxt} ulid=%{WORD:maxt}
+PROMETHEUS1 level=%{WORD:loglevel} ts=%{TIMESTAMP_ISO8601} caller=%{GREEDYDATA:caller} msg=\"%{GREEDYDATA:message}\"
+PROMETHEUS2 level=%{WORD:loglevel} ts=%{TIMESTAMP_ISO8601} caller=%{GREEDYDATA:caller} host_details=\"%{GREEDYDATA:message}\"
+PROMETHEUS3 level=%{WORD:loglevel} ts=%{TIMESTAMP_ISO8601} caller=%{GREEDYDATA:caller} build_context=\"%{GREEDYDATA:message}\"
+PROMETHEUS4 level=%{WORD:loglevel} ts=%{TIMESTAMP_ISO8601} caller=%{GREEDYDATA:caller} fd_limits=\"%{GREEDYDATA:message}\"
+PROMETHEUS5 %{YEAR}/%{MONTHNUM}/%{MONTHDAY} %{TIME} %{GREEDYDATA:message}
+PROMETHEUS (?:%{PROMETHEUS0}|%{PROMETHEUS1}|%{PROMETHEUS2}|%{PROMETHEUS3}|%{PROMETHEUS4}|%{PROMETHEUS5})
+
+
+####
+#PUSHGATEWAY
+####
+PUSHGATEWAY %{NODEEXPORTER}
+
+
+####
+#ZABBIX SERVER
+####
+ZABBIXSERVER0 %{NOTSPACE} server #%{NUMBER:serverid} started \[%{GREEDYDATA:servertype} #%{NUMBER:servertypeid}
+ZABBIXSERVER1 %{NOTSPACE} %{GREEDYDATA:type} \"%{NOTSPACE:target}\" %{GREEDYDATA:status}: %{GREEDYDATA:message}
+ZABBIXSERVER2 %{NOTSPACE} %{GREEDYDATA:type} \"%{NOTSPACE:target}\" %{GREEDYDATA:status}
+ZABBIXSERVER3 %{NOTSPACE} %{GREEDYDATA:features}:%{SPACE}%{WORD:status}
+ZABBIXSERVER4 %{NOTSPACE} %{GREEDYDATA:type} \[deleted %{NUMBER:hist} hist/trends, %{NUMBER:items} items/triggers, %{NUMBER:events} events, %{NUMBER:problems} problems, %{NUMBER:sessions} sessions, %{NUMBER:alarms} alarms, %{NUMBER:audit} audit items in %{GREEDYDATA:exec_time}, idle for %{GREEDYDATA:idle_time}\]
+ZABBIXSERVER (?:%{ZABBIXSERVER0}|%{ZABBIXSERVER1}|%{ZABBIXSERVER2}|%{ZABBIXSERVER3}|%{ZABBIXSERVER4})
