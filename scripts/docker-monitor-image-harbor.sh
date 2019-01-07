@@ -36,6 +36,9 @@ done
 
 USED_IMAGES=`$DOCKER_CMD ps -a --format '{{.Image}}' | grep "$HARBOR_DOMAIN"`
 NB_USED_IMAGES_OBSOLETE=0
+
+echo "docker_container_to_run{instance=\"$HARBOR_NAME\",type=\"toruncontainer\",repository=\"Nothing\",tag=\"Nothing\"} 1" >> $TMP
+
 for i in $USED_IMAGES; do
 	SHORTNAME=`echo $i | sed "s/$HARBOR_DOMAIN//g"`
 	REPOSITORY=`echo $SHORTNAME | cut -d ":" -f1`

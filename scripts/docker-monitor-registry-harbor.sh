@@ -13,7 +13,12 @@ HARBOR_PROJECT_ID="1 2"
 
 CURLAPI="curl -s -u ${HARBOR_API_USER}:${HARBOR_API_PASSWORD} ${CERT} ${HARBOR_API_URL}"
 
-PUSHGATEWAY_URL="http://login:password@HOSTNAME:PORT/metrics/job/registry"
+PUSHGATEWAY_URL="http://login:password@HOSTNAME:PORT/metrics"
+
+#CLEAN before create : drop old/non existant tags
+for i in `curl -s $PUSHGATEWAY_URL | grep docker_registry_fixedVersion | grep "instance=\"${HARBOR_NAME}\"" | awk -F '"' '{ print $6"/tags/"$8 }'`; do
+	curl -XDELETE $PUSHGATEWAY_URL/job/registry/repositories/$i
+done
 
 TOUPDATE=""
 NB=0
@@ -35,7 +40,7 @@ for i in $HARBOR_PROJECT_ID; do
 			SEVERITY_NEGLIGIBLE=`echo $OUTPUT_VUL | grep -o '"severity": 1' | wc -l`
 			repositories=`echo $j | sed "s./._.g"`
 
-			cat << EOF | curl --data-binary @- ${PUSHGATEWAY_URL}/repositories/$repositories/tags/$k
+			cat << EOF | curl --data-binary @- ${PUSHGATEWAY_URL}/job/registry/repositories/$repositories/tags/$k
 docker_registry_vulnerability{instance="$HARBOR_NAME",repositories="$j",tags="$k",severity="HIGH"} $SEVERITY_HIGH
 docker_registry_vulnerability{instance="$HARBOR_NAME",repositories="$j",tags="$k",severity="MEDIUM"} $SEVERITY_MEDIUM
 docker_registry_vulnerability{instance="$HARBOR_NAME",repositories="$j",tags="$k",severity="LOW"} $SEVERITY_LOW
