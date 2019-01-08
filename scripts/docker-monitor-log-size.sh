@@ -17,7 +17,7 @@ for i in $CONTAINER; do
         CONTAINER_NAME=`docker inspect $CONTAINER_ID | grep -m 1 Name | cut -d '"' -f4 | cut -d '/' -f2`
         CONTAINER_SIZE=`ls -l $i | cut -d ' ' -f5`
         CONTAINER_IMAGE=`docker inspect $CONTAINER_NAME | grep -v sha256 | grep '"Image"' | cut -d '"' -f4`
-        echo "docker_container_purge{instance=\"log\",container_name=\"${CONTAINER_NAME}\",image=\"$CONTAINER_IMAGE\"} $CONTAINER_SIZE" >> $TMP
+	echo "docker_container_purge{instance=\"$HOSTNAME\",container_name=\"${CONTAINER_NAME}\",image=\"$CONTAINER_IMAGE\"} $CONTAINER_SIZE" >> $TMP
 
 done
 

@@ -18,7 +18,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 16,
-  "iteration": 1545384743174,
+  "iteration": 1546868262276,
   "links": [],
   "panels": [
     {
@@ -95,12 +95,19 @@
           "refId": "D"
         },
         {
-          "expr": "count(dockerbenchsecurity{job=\"dockerbench\"}) by (instance,version)",
+          "expr": "count(dockerbenchsecurity{job=\"dockerbench\",instance=~\"$docker\"}) by (cat,version)",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "[Bench {{ version }}] {{ instance }}",
+          "legendFormat": "[Bench {{ version }}] {{ cat }}",
           "refId": "E"
+        },
+        {
+          "expr": "count(docker_healthcheck{status!=\"healthy\",instance=~\"$docker\"}) by (status)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "[healthcheck] {{status}}",
+          "refId": "F"
         }
       ],
       "thresholds": [],
@@ -110,7 +117,7 @@
       "title": "Images and container",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "transparent": true,
@@ -450,7 +457,7 @@
       ],
       "targets": [
         {
-          "expr": "docker_container_to_run{instance=~\"$registry\",repository=~\"_$repositories\",tag=~\"$tags\"}",
+          "expr": "docker_container_to_run{instance=~\"$docker\",registry=~\"$registry\",repository=~\"_$repositories\",tag=~\"$tags\"}",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -459,7 +466,7 @@
           "refId": "A"
         }
       ],
-      "title": "Deployed images where tag are rebuild",
+      "title": "Deployed images which tag are rebuild",
       "transform": "table",
       "transparent": true,
       "type": "table"
@@ -592,7 +599,7 @@
       ],
       "targets": [
         {
-          "expr": "docker_container_purge{instance=\"log\"}/1024/1024/1024",
+          "expr": "docker_container_purge{instance=~\"$docker\"}/1024/1024/1024",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -624,6 +631,7 @@
       "legend": {
         "avg": false,
         "current": false,
+        "hideZero": false,
         "max": false,
         "min": false,
         "show": true,
@@ -645,7 +653,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "docker_registry_fixedVersion{instance=~\"$registry\",repositories=~\"$repositories\",tags=~\"$tags\"}",
+          "expr": "docker_registry_fixedVersion{instance=~\"$registry\",repositories=~\"$repositories\",tags=~\"$tags\"} != 0",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -660,7 +668,7 @@
       "title": "Fixed version",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "transparent": true,
@@ -713,6 +721,7 @@
       "legend": {
         "avg": false,
         "current": false,
+        "hideZero": false,
         "max": false,
         "min": false,
         "show": true,
@@ -735,7 +744,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "docker_registry_vulnerability{instance=\"harbor\",repositories=~\"$repositories\",tags=~\"$tags\",severity=~\"$severity\"}",
+          "expr": "docker_registry_vulnerability{instance=\"harbor\",repositories=~\"$repositories\",tags=~\"$tags\",severity=~\"$severity\"} != 0",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -751,7 +760,7 @@
       "title": "Vulnerabilities",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "transparent": true,
@@ -799,9 +808,10 @@
       {
         "allValue": ".*",
         "current": {
-          "text": "harbor",
+          "tags": [],
+          "text": "All",
           "value": [
-            "harbor"
+            "$__all"
           ]
         },
         "datasource": "Prometheus",
@@ -899,6 +909,31 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "Prometheus",
+        "definition": "label_values(docker_healthcheck,instance)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Docker",
+        "multi": true,
+        "name": "docker",
+        "options": [],
+        "query": "label_values(docker_healthcheck,instance)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
@@ -934,5 +969,5 @@
   "timezone": "browser",
   "title": "[Docker] Bench",
   "uid": "6p_kSDBmz",
-  "version": 145
+  "version": 162
 }
